@@ -22,6 +22,12 @@ builder.Services.AddScoped<ICommandAPIRepo, SqlCommandAPIRepo>();
 
 var app = builder.Build();
 
+using(var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CommandContext>();
+    dbContext.Database.EnsureCreated();
+}
+
 app.MapGet("/", () => "Hello World!");
 
 app.MapControllers();
